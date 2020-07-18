@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ListSelectionRecyclerViewAdapter : RecyclerView.Adapter<ListSelectionViewHolder>() {
 
-    val listTitles = arrayOf("Shopping List", "Chores", "Android Tutorials")
+    private val listTitles = arrayOf("Shopping List", "Chores", "Android Tutorials")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListSelectionViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
