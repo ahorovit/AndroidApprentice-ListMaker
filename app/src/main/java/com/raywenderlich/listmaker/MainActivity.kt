@@ -14,12 +14,15 @@ import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    val listDataManager = ListDataManager(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val lists = listDataManager.readLists()
         listsRecyclerView.layoutManager = LinearLayoutManager(this)
-        listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter()
+        listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter(lists)
 
 
         setSupportActionBar(toolbar)
@@ -54,6 +57,12 @@ class MainActivity : AppCompatActivity() {
         builder.setTitle(dialogTitle)
         builder.setView(listTitleEditText)
         builder.setPositiveButton(positiveButtonTitle) { dialog, _ ->
+            val list = TaskList(listTitleEditText.text.toString())
+            listDataManager.saveList(list)
+
+            val recyclerAdapter = listsRecyclerView.adapter as ListSelectionRecyclerViewAdapter
+            recyclerAdapter.addList(list)
+
             dialog.dismiss()
         }
 
