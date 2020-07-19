@@ -2,6 +2,9 @@ package com.raywenderlich.listmaker
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
+
+import kotlinx.android.synthetic.main.activity_list_detail.*
 
 class ListDetailActivity : AppCompatActivity() {
 
@@ -13,5 +16,8 @@ class ListDetailActivity : AppCompatActivity() {
 
         list = intent.getParcelableExtra(MainActivity.INTENT_LIST_KEY) as TaskList
         title = list.name
+
+        listItemsRecyclerView.adapter = ListItemsRecyclerViewAdapter(list)
+        listItemsRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 }
