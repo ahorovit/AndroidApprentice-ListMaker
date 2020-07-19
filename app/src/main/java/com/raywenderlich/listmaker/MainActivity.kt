@@ -1,5 +1,6 @@
 package com.raywenderlich.listmaker
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ListSelectionRecyclerViewAdapter.ListSelectionRecyclerViewClickListener {
 
     val listDataManager = ListDataManager(this)
 
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         val lists = listDataManager.readLists()
         listsRecyclerView.layoutManager = LinearLayoutManager(this)
-        listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter(lists)
+        listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter(lists, this)
 
 
         setSupportActionBar(toolbar)
@@ -57,15 +58,39 @@ class MainActivity : AppCompatActivity() {
         builder.setTitle(dialogTitle)
         builder.setView(listTitleEditText)
         builder.setPositiveButton(positiveButtonTitle) { dialog, _ ->
+            // Create new list with label input into dialog, then save into SharedPreferences
             val list = TaskList(listTitleEditText.text.toString())
             listDataManager.saveList(list)
 
+            // add new list to RecyclerView
             val recyclerAdapter = listsRecyclerView.adapter as ListSelectionRecyclerViewAdapter
             recyclerAdapter.addList(list)
 
+            // Close dialog and navigate to ListDetailsActivity
             dialog.dismiss()
+            showListDetail(list)
         }
 
         builder.create().show()
+    }
+
+    /**
+     * Navigates to ListDetailActivity with specific list
+     */
+    private fun showListDetail(list: TaskList) {
+        val listDetailIntent = Intent(this, ListDetailActivity::class.java)
+        listDetailIntent.putExtra(INTENT_LIST_KEY, list)
+        startActivity(listDetailIntent)
+    }
+
+    /**
+     * Allows ViewHolders to navigate to ListDetailActivity
+     */
+    override fun listItemClicked(list: TaskList) {
+        showListDetail(list)
+    }
+
+    companion object {
+        const val INTENT_LIST_KEY = "list"
     }
 }
