@@ -32,6 +32,8 @@ class MainActivity : AppCompatActivity(),
         largeScreen = (fragmentContainer != null)
 
         fab.setOnClickListener { showCreateListDialog() }
+
+        setSupportActionBar(toolbar)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
